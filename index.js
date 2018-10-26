@@ -1,6 +1,9 @@
 var config = require('./config.json');
 var express = require('express');
 
+var SteamAPI = require('steamapi');
+var steam = new SteamAPI(config.SteamWebAPIKey)
+
 var app = express();
 
 app.get('/', function(req, res) {
