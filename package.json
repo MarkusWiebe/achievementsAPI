@@ -1,0 +1,22 @@
+{
+  "name": "achievmentsapi",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MarkusWiebe/achievmentsAPI.git"
+  },
+  "author": "Markus Wiebe",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/MarkusWiebe/achievmentsAPI/issues"
+  },
+  "homepage": "https://github.com/MarkusWiebe/achievmentsAPI#readme",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
+}
