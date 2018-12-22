@@ -22,5 +22,8 @@
     "cors": "^2.8.5",
     "express": "^4.16.4",
     "steamapi": "^2.0.3"
+  },
+  "devDependencies": {
+    "morgan": "^1.9.1"
   }
 }
