@@ -1,9 +1,10 @@
-var config = require('./../config.json');
-var express = require('express');
-var router = express.Router();
+import express from 'express';
+import SteamAPI from 'steamapi';
 
-var SteamAPI = require('steamapi');
-var steam = new SteamAPI(config.SteamWebAPIKey);
+import config from '../config.json';
+
+const router = express.Router();
+const steam = new SteamAPI(config.SteamWebAPIKey);
 
 // The answer we get from Steam
 router.get('/profile', async function(req,res) {
