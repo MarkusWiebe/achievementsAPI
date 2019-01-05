@@ -1,6 +1,6 @@
 import express from 'express';
+import 'dotenv/config';
 
-import config from './config.json';
 import dev from './dev';
 
 import steamRouter from './router/steam.router.js';
@@ -12,6 +12,6 @@ dev.enableDevFeatures(app);
 app.use('/steam', steamRouter);
 app.use('/', baseRouter);
 
-app.listen(config.Port, function() {
-    console.log('Server listening on port ' + config.Port);
+app.listen(process.env.PORT, function() {
+    console.log('Server listening on port ' + process.env.PORT);
 });

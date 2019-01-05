@@ -1,10 +1,9 @@
 import express from 'express';
 import SteamAPI from 'steamapi';
-
-import config from '../config.json';
+import 'dotenv/config';
 
 const router = express.Router();
-const steam = new SteamAPI(config.SteamWebAPIKey);
+const steam = new SteamAPI(process.env.STEAM_KEY);
 
 // The answer we get from Steam
 router.get('/profile', async function(req,res) {
