@@ -2,6 +2,8 @@ import express from 'express';
 import SteamAPI from 'steamapi';
 import 'dotenv/config';
 
+import  ensureAuthenticated from '../auth';
+
 const router = express.Router();
 const steam = new SteamAPI(process.env.STEAM_KEY);
 
@@ -22,7 +24,7 @@ router.get('/profile', async function(req,res) {
 });
 
 // The answer we get from Steam reduced to profilepicture, nickname and (resolved) friendslist
-router.get('/profile/v1',async function(req, res) {
+router.get('/profile/v1', async function(req, res) {
     if(req.query.steamid === undefined) {
         res.status(400).send({
             error: {
@@ -68,7 +70,7 @@ router.get('/profile/v1',async function(req, res) {
 });
 
 // The answer we get from Steam reduced to profilepicture and nickname
-router.get('/profile/v2',async function(req, res) {
+router.get('/profile/v2', async function(req, res) {
     if(req.query.steamid === undefined) {
         res.status(400).send({
             error: {
