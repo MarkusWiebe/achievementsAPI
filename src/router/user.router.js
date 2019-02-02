@@ -1,94 +1,56 @@
-const express = require('express');
+import express from 'express';
+import userService from '../service/user.service';
+
 const router = express.Router();
-const bcrypt = require('bcrypt');
-const passport = require('passport');
-// Load User model
-const User = require('../models/user.model');
 
-// Login Page
-router.get('/login', (req, res) => res.render('login'));
+router.post('/authenticate', authenticate);
+router.post('/register', register);
+router.get('/', getAll);
+router.get('/current', getCurrent);
+router.get('/:id', getById);
+router.put('/:id', update);
+router.delete('/:id', _delete);
 
-// Register Page
-router.get('/register', (req, res) => res.render('register'));
+function authenticate(req, res, next) {
+  userService.authenticate(req.body)
+    .then(user => user ? res.json(user) : res.status(400).json({ message: 'Username or password is incorrect' }))
+    .catch(err => next(err));
+}
 
-// Register
-router.post('/register', (req, res) => {
-  const { name, email, password, password2 } = req.body;
-  let errors = [];
+function register(req, res, next) {
+  userService.create(req.body)
+      .then(() => res.json({}))
+      .catch(err => next(err));
+}
 
-  if (!name || !email || !password || !password2) {
-    errors.push({ msg: 'Please enter all fields' });
-  }
+function getAll(req, res, next) {
+  userService.getAll()
+      .then(users => res.json(users))
+      .catch(err => next(err));
+}
 
-  if (password != password2) {
-    errors.push({ msg: 'Passwords do not match' });
-  }
+function getCurrent(req, res, next) {
+  userService.getById(req.user.sub)
+      .then(user => user ? res.json(user) : res.sendStatus(404))
+      .catch(err => next(err));
+}
 
-  if (password.length < 6) {
-    errors.push({ msg: 'Password must be at least 6 characters' });
-  }
+function getById(req, res, next) {
+  userService.getById(req.params.id)
+      .then(user => user ? res.json(user) : res.sendStatus(404))
+      .catch(err => next(err));
+}
 
-  if (errors.length > 0) {
-    res.render('register', {
-      errors,
-      name,
-      email,
-      password,
-      password2
-    });
-  } else {
-    User.findOne({ email: email }).then(user => {
-      if (user) {
-        errors.push({ msg: 'Email already exists' });
-        res.render('register', {
-          errors,
-          name,
-          email,
-          password,
-          password2
-        });
-      } else {
-        const newUser = new User({
-          name,
-          email,
-          password
-        });
+function update(req, res, next) {
+  userService.update(req.params.id, req.body)
+      .then(() => res.json({}))
+      .catch(err => next(err));
+}
 
-        bcrypt.genSalt(10, (err, salt) => {
-          bcrypt.hash(newUser.password, salt, (err, hash) => {
-            if (err) throw err;
-            newUser.password = hash;
-            newUser
-              .save()
-              .then(user => {
-                req.flash(
-                  'success_msg',
-                  'You are now registered and can log in'
-                );
-                res.redirect('/users/login');
-              })
-              .catch(err => console.log(err));
-          });
-        });
-      }
-    });
-  }
-});
-
-// Login
-router.post('/login', (req, res, next) => {
-  passport.authenticate('local', {
-    successRedirect: '/dashboard',
-    failureRedirect: '/users/login',
-    failureFlash: true
-  })(req, res, next);
-});
-
-// Logout
-router.get('/logout', (req, res) => {
-  req.logout();
-  req.flash('success_msg', 'You are logged out');
-  res.redirect('/users/login');
-});
+function _delete(req, res, next) {
+  userService.delete(req.params.id)
+      .then(() => res.json({}))
+      .catch(err => next(err));
+}
 
 module.exports = router;

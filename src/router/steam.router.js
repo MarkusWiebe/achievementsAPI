@@ -2,7 +2,7 @@ import express from 'express';
 import SteamAPI from 'steamapi';
 import 'dotenv/config';
 
-import  ensureAuthenticated from '../auth';
+import ensureAuthenticated from '../auth';
 
 const router = express.Router();
 const steam = new SteamAPI(process.env.STEAM_KEY);
